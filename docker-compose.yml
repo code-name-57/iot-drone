@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  # cuda:
+  #   restart: always
+  #   build: ./CUDA
+  #   privileged: true
+
+  # opencv:
+  #   restart: always
+  #   build: ./OPENCV
+  #   privileged: true
+
+  roscore:
+    build: ./ROS/CORE
+
+  talker:
+    build: ./ROS/TALKER
+
+  listener:
+    build: ./ROS/LISTENER
