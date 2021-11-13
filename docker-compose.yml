@@ -12,10 +12,24 @@ services:
   #   privileged: true
 
   roscore:
+    container_name: master
     build: ./ROS/CORE
+    command: roscore
 
   talker:
-    build: ./ROS/TALKER
+    container_name: talker
+    build:
+      context: ./ROS/TALKER
+      dockerfile: Dockerfile
+    command: rosrun roscpp_tutorials talker
+    environment:
+      - ROS_HOSTNAME=talker
+      - ROS_MASTER_URI=http://master:11311
 
   listener:
+    container_name: listner
     build: ./ROS/LISTENER
+    command: rosrun roscpp_tutorials listner
+    environment:
+      - ROS_HOSTNAME=listner
+      - ROS_MASTER_URI=http://master:11311

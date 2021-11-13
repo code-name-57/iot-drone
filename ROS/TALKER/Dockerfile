@@ -1,5 +1,8 @@
 FROM dustynv/ros:melodic-ros-base-l4t-r32.5.0
 
-ENV ROS_MASTER_URI=http://roscore:11311
-ENV ROS_HOSTNAME=talker
-CMD [ "rosrun roscpp_tutorials talker" ]
+RUN echo =====****Updating apt*****=====
+RUN apt-get update
+RUN echo =====****installing pkgs*****=====
+RUN apt-get install -y ros-melodic-ros-tutorials ros-melodic-common-tutorials
+
+CMD [ "/bin/bash" ]
