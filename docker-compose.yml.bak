@@ -1,0 +1,54 @@
+version: '2'
+
+networks:
+  ros:
+    driver: bridge
+
+services:
+  # cuda:
+  #   restart: always
+  #   build: ./CUDA
+  #   privileged: true
+
+  # opencv:
+  #   restart: always
+  #   build: ./OPENCV
+  #   privileged: true
+
+  roscore:
+    container_name: master
+    restart: always
+    build: ./ROS/CORE
+    command: roscore -v
+    networks:
+      - ros
+
+  talker:
+    container_name: talker
+    restart: always
+    build:
+      context: ./ROS/TALKER
+      dockerfile: Dockerfile
+    command: rosrun roscpp_tutorials talker
+    environment:
+      - ROS_HOSTNAME=talker
+      - ROS_MASTER_URI=http://roscore:11311
+    networks:
+      - ros
+    depends_on:
+      - roscore
+
+  listener:
+    container_name: listner
+    restart: always
+    build:
+      context: ./ROS/LISTENER
+      dockerfile: Dockerfile
+    command: rosrun roscpp_tutorials listener
+    environment:
+      - ROS_HOSTNAME=listener
+      - ROS_MASTER_URI=http://roscore:11311
+    networks:
+      - ros
+    depends_on:
+      - roscore

@@ -1,35 +1,37 @@
 version: '2'
 
+networks:
+  ros:
+    driver: bridge
+
 services:
-  # cuda:
-  #   restart: always
-  #   build: ./CUDA
-  #   privileged: true
-
-  # opencv:
-  #   restart: always
-  #   build: ./OPENCV
-  #   privileged: true
-
-  roscore:
-    container_name: master
-    build: ./ROS/CORE
-    command: roscore
+  ros-master:
+    image: ros:melodic-ros-core
+    command: stdbuf -o L roscore
+    networks:
+      - ros
+    restart: always
 
   talker:
-    container_name: talker
-    build:
-      context: ./ROS/TALKER
-      dockerfile: Dockerfile
-    command: rosrun roscpp_tutorials talker
+    image: ros:melodic-ros-core
+    depends_on:
+      - ros-master
     environment:
-      - ROS_HOSTNAME=talker
-      - ROS_MASTER_URI=http://master:11311
+      - "ROS_MASTER_URI=http://ros-master:11311"
+      - "ROS_HOSTNAME=talker"
+    command: stdbuf -o L rostopic pub /chatter std_msgs/String "hello" -r 1
+    networks:
+      - ros
+    restart: always
 
   listener:
-    container_name: listner
-    build: ./ROS/LISTENER
-    command: rosrun roscpp_tutorials listner
+    image: ros:melodic-ros-core
+    depends_on:
+      - ros-master
     environment:
-      - ROS_HOSTNAME=listner
-      - ROS_MASTER_URI=http://master:11311
+      - "ROS_MASTER_URI=http://ros-master:11311"
+      - "ROS_HOSTNAME=listener"
+    command: stdbuf -o L rostopic echo /chatter
+    networks:
+      - ros
+    restart: always
