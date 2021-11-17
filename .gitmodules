@@ -1,3 +1,6 @@
 [submodule "ROS/CAMERA/gscam"]
 	path = ROS/CAMERA/gscam
 	url = https://github.com/code-name-57/gscam.git
+[submodule ".\\ROS\\CALIBRATION\\ros_ws\\src\\image_pipeline"]
+	path = .\\ROS\\CALIBRATION\\ros_ws\\src\\image_pipeline
+	url = git@github.com:code-name-57/image_pipeline.git
