@@ -41,13 +41,30 @@ services:
     build:
       context: ./ROS/CALIBRATION
       dockerfile: Dockerfile
-    volumes:
-      - ./ROS/CALIBRATION/ros_ws:/app/ros_ws
+    # volumes:
+      # - ./ROS/CALIBRATION/ros_ws:/app/ros_ws
     depends_on:
       - ros-master
     environment:
       - "ROS_MASTER_URI=http://ros-master:11311"
       - "ROS_HOSTNAME=calibration"
+    command: stdbuf -o L rostopic echo /chatter
+    networks:
+      - ros
+    restart: always
+
+  cameras:
+    # image: ros:melodic-ros-core
+    build:
+      context: ./ROS/CAMERA
+      dockerfile: Dockerfile
+    # volumes:
+      # - ./ROS/CAMERA/ros_ws:/app/ros_ws
+    depends_on:
+      - ros-master
+    environment:
+      - "ROS_MASTER_URI=http://ros-master:11311"
+      - "ROS_HOSTNAME=cameras"
     command: stdbuf -o L rostopic echo /chatter
     networks:
       - ros

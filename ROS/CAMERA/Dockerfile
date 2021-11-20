@@ -1,9 +1,19 @@
-FROM dustynv/ros:melodic-ros-base-l4t-r32.5.0
+FROM ros:melodic-ros-core
 
-WORKDIR /ros_workspace
-COPY . /ros_workspace/src
+WORKDIR /app
+COPY ros_ws ros_ws
 
-RUN cd src
+RUN apt-get update
+RUN apt-get install -y build-essential
 
+RUN apt-get install -y python-rosdep
+RUN rosdep init
+RUN rosdep update
 
-CMD [ "roscore" ]
+WORKDIR /app/ros_ws
+
+RUN rosdep install --from-paths src --ignore-src -r -y
+RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash ;\
+                    catkin_make ;"
+
+CMD [ "sleep", "infinity" ]
