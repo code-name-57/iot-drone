@@ -4,3 +4,6 @@
 [submodule "ROS/CALIBRATION/ros_ws/src/image_pipeline"]
 	path = ROS/CALIBRATION/ros_ws/src/image_pipeline
 	url = git@github.com:code-name-57/image_pipeline.git
+[submodule "ROS/Unity-ROS/ros_ws/src/ROS-TCP-Endpoint"]
+	path = ROS/Unity-ROS/ros_ws/src/ROS-TCP-Endpoint
+	url = https://github.com/Unity-Technologies/ROS-TCP-Endpoint.git
