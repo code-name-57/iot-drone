@@ -12,17 +12,35 @@ services:
       - ros
     restart: always
 
-  talker:
-    image: ros:melodic-ros-core
+  unity-ros:
+    build:
+      context: ./ROS/Unity-ROS
+      dockerfile: Dockerfile
+    # volumes:
+      # - ./ROS/CALIBRATION/ros_ws:/app/ros_ws
     depends_on:
       - ros-master
     environment:
       - "ROS_MASTER_URI=http://ros-master:11311"
-      - "ROS_HOSTNAME=talker"
-    command: stdbuf -o L rostopic pub /chatter std_msgs/String "hello" -r 1
+      # - "ROS_HOSTNAME=unity_ros"
+    command: bash -c "source devel/setup.bash; roslaunch ros_tcp_endpoint endpoint.launch"
     networks:
       - ros
+    ports:
+      - "10000:10000"
     restart: always
+
+  # talker:
+  #   image: ros:melodic-ros-core
+  #   depends_on:
+  #     - ros-master
+  #   environment:
+  #     - "ROS_MASTER_URI=http://ros-master:11311"
+  #     - "ROS_HOSTNAME=talker"
+  #   command: stdbuf -o L rostopic pub /chatter std_msgs/String "hello" -r 1
+  #   networks:
+  #     - ros
+  #   restart: always
 
   listener:
     image: ros:melodic-ros-core
@@ -31,41 +49,41 @@ services:
     environment:
       - "ROS_MASTER_URI=http://ros-master:11311"
       - "ROS_HOSTNAME=listener"
-    command: stdbuf -o L rostopic echo /chatter
+    command: stdbuf -o L rostopic hz /image
     networks:
       - ros
     restart: always
 
-  calibration:
-    # image: ros:melodic-ros-core
-    build:
-      context: ./ROS/CALIBRATION
-      dockerfile: Dockerfile
-    # volumes:
-      # - ./ROS/CALIBRATION/ros_ws:/app/ros_ws
-    depends_on:
-      - ros-master
-    environment:
-      - "ROS_MASTER_URI=http://ros-master:11311"
-      - "ROS_HOSTNAME=calibration"
-    command: stdbuf -o L rostopic echo /chatter
-    networks:
-      - ros
-    restart: always
+  # calibration:
+  #   # image: ros:melodic-ros-core
+  #   build:
+  #     context: ./ROS/CALIBRATION
+  #     dockerfile: Dockerfile
+  #   # volumes:
+  #     # - ./ROS/CALIBRATION/ros_ws:/app/ros_ws
+  #   depends_on:
+  #     - ros-master
+  #   environment:
+  #     - "ROS_MASTER_URI=http://ros-master:11311"
+  #     - "ROS_HOSTNAME=calibration"
+  #   command: stdbuf -o L rostopic echo /chatter
+  #   networks:
+  #     - ros
+  #   restart: always
 
-  cameras:
-    # image: ros:melodic-ros-core
-    build:
-      context: ./ROS/CAMERA
-      dockerfile: Dockerfile
-    # volumes:
-      # - ./ROS/CAMERA/ros_ws:/app/ros_ws
-    depends_on:
-      - ros-master
-    environment:
-      - "ROS_MASTER_URI=http://ros-master:11311"
-      - "ROS_HOSTNAME=cameras"
-    command: stdbuf -o L rostopic echo /chatter
-    networks:
-      - ros
-    restart: always
+  # cameras:
+  #   # image: ros:melodic-ros-core
+  #   build:
+  #     context: ./ROS/CAMERA
+  #     dockerfile: Dockerfile
+  #   # volumes:
+  #     # - ./ROS/CAMERA/ros_ws:/app/ros_ws
+  #   depends_on:
+  #     - ros-master
+  #   environment:
+  #     - "ROS_MASTER_URI=http://ros-master:11311"
+  #     - "ROS_HOSTNAME=cameras"
+  #   command: stdbuf -o L rostopic echo /chatter
+  #   networks:
+  #     - ros
+  #   restart: always
