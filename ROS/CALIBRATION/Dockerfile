@@ -1,8 +1,8 @@
-FROM dorowu/ubuntu-desktop-lxde-vnc:bionic
+FROM dorowu/ubuntu-desktop-lxde-vnc:focal
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEV_NAME=rosdev
-ENV ROS_DISTRO=melodic
+ENV ROS_DISTRO=noetic
 ENV GROUP_NAME=ros
 ENV ROS_WORKSPACE=catkin_ws
 
@@ -17,7 +17,7 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sud
 
 RUN apt update
 RUN apt install -yq ros-${ROS_DISTRO}-ros-base \
-                    python-rosdep \
+                    python3-rosdep \
                     ros-${ROS_DISTRO}-rviz \
                     ros-${ROS_DISTRO}-dwa-local-planner \
                     ros-${ROS_DISTRO}-turtlebot3-navigation \
@@ -27,7 +27,7 @@ RUN apt install -yq ros-${ROS_DISTRO}-ros-base \
 RUN apt install -yq vim \
                     iputils-ping \
                     net-tools \
-                    python-pip \
+                    python3-pip \
                     ros-${ROS_DISTRO}-robot-state-publisher \
                     ros-${ROS_DISTRO}-moveit \
                     ros-${ROS_DISTRO}-rosbridge-suite \
