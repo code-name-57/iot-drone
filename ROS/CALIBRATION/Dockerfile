@@ -43,13 +43,9 @@ RUN useradd --create-home --home-dir /home/${DEV_NAME} --shell /bin/bash --user-
     echo "$DEV_NAME:$DEV_NAME" | chpasswd && \
     echo "$DEV_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-RUN git clone https://github.com/Unity-Technologies/ROS-TCP-Endpoint /home/${DEV_NAME}/${ROS_WORKSPACE}/src/ros_tcp_endpoint -b v0.6.0
-
 COPY --chown=${DEV_NAME} ./ros_ws/src /home/${DEV_NAME}/${ROS_WORKSPACE}/src
 
 WORKDIR /home/${DEV_NAME}/${ROS_WORKSPACE}
-
-RUN echo "ROS_IP: 0.0.0.0" > /home/${DEV_NAME}/${ROS_WORKSPACE}/src/ros_tcp_endpoint/config/params.yaml
 
 RUN rosdep init
 RUN rosdep update
@@ -59,11 +55,6 @@ RUN /bin/bash -c "find /home/${DEV_NAME}/${ROS_WORKSPACE} -type f -print0 | xarg
 RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash ;\
 rosdep install --from-paths src --ignore-src -r -y;\
     catkin_make ;"
-
-
-RUN chmod +x src/ros_tcp_endpoint/src/ros_tcp_endpoint/*.py
-
-ENV TURTLEBOT3_MODEL=waffle_pi
                     
 RUN echo "source /home/${DEV_NAME}/${ROS_WORKSPACE}/devel/setup.bash" >> /home/${DEV_NAME}/.bashrc
 
